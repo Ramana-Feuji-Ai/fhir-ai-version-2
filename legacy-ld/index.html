@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FHIR L&amp;D — Learning &amp; Development for Health Interoperability</title>
+  <meta name="description" content="A professional FHIR Learning & Development site: what FHIR is, resources, REST, terminology, SMART App Launch, implementation guides, and interactive conversation videos.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top">
+        <svg class="mark" viewBox="0 0 40 40" aria-hidden="true">
+          <rect width="40" height="40" rx="10" fill="#e87722"/>
+          <path d="M10 26c4-9 7-13 10-13s6 4 10 13" fill="none" stroke="#0a1c31" stroke-width="2.4"/>
+          <circle cx="20" cy="12" r="3" fill="#0a1c31"/>
+        </svg>
+        <span>
+          <span class="brand-name">FHIR <span>L&amp;D</span></span>
+          <span class="brand-sub">Learning &amp; Development</span>
+        </span>
+      </a>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="nav">Menu</button>
+      <nav class="nav" id="nav">
+        <a href="#what">What is FHIR</a>
+        <a href="#foundation">Foundation</a>
+        <a href="#videos">Videos</a>
+        <a href="#curriculum">Curriculum</a>
+        <a href="#start">Get started</a>
+        <a href="#community">Community</a>
+        <a class="nav-download" href="fhir-ld-phase1.zip" download>Download site</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-media" aria-hidden="true">
+        <img src="assets/images/hero-learning.jpg" alt="">
+      </div>
+      <div class="wrap hero-copy">
+        <p class="kicker">HL7 FHIR · Implementer education</p>
+        <h1>Learn FHIR the way healthcare actually exchanges data.</h1>
+        <p class="lede">FHIR L&amp;D is a professional learning site for clinicians, analysts, and engineers. Phase 1 gives you the complete landing story plus interactive conversation videos — two instructors, one speaking at a time, with captions that stay readable on a phone or a lecture display.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#videos">Watch the conversation videos</a>
+          <a class="btn btn-ghost" href="fhir-ld-phase1.zip" download>Download ZIP</a>
+          <a class="btn btn-ghost" href="#what">Read the full briefing</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="trust-bar">
+      <div class="wrap">
+        <span>Aligned to the HL7 FHIR Foundation mission at fhir.org</span>
+        <span>Specification road map: FHIR R4 and R5</span>
+        <span>Audience: implementers, informaticists, product owners</span>
+      </div>
+    </div>
+
+    <section class="section" id="what">
+      <div class="wrap">
+        <h2>What FHIR is — and what this site is for</h2>
+        <p class="intro">FHIR (Fast Healthcare Interoperability Resources) is an HL7 specification for healthcare interoperability. The HL7 FHIR Foundation exists to promote global adoption and implementation of that platform: information, educational materials, tools, websites, and project support so the community can collaborate, align, and expand. This L&amp;D site is a structured classroom on top of that public record.</p>
+        <div class="grid-2">
+          <div class="prose">
+            <h3>The problem FHIR addresses</h3>
+            <p>Healthcare records are increasingly digitized. As patients move around the ecosystem, electronic health records must be available, discoverable, and understandable. Automated clinical decision support and other machine processing also require data that is structured and standardized — not only locked in PDFs or proprietary tables.</p>
+            <p>HL7 has produced healthcare data exchange and information modeling standards for more than twenty years. FHIR is a newer specification based on emerging industry approaches, informed by the requirements, successes, and challenges of HL7 v2, HL7 v3 and the RIM, and CDA. It can be used as a stand-alone exchange standard, and it can be used in partnership with those widely deployed standards.</p>
+            <h3>The design aim</h3>
+            <p>FHIR aims to simplify implementation without sacrificing information integrity. It leverages existing logical and theoretical models to provide a consistent, implementable, rigorous mechanism for exchanging data between healthcare applications. Built-in traceability to the HL7 RIM and other content models keeps alignment with prior HL7 patterns without forcing every implementer to become a RIM expert.</p>
+            <p>The philosophy is to define a base set of resources that, alone or combined, satisfy the majority of common use cases. Remaining needs are covered by a built-in extension mechanism and by Implementation Guides that constrain the platform for a nation, a network, or a clinical specialty.</p>
+          </div>
+          <aside class="callout">
+            <h3>Official orientation</h3>
+            <p>fhir.org is the home for FHIR implementers, run by the HL7 FHIR Foundation on behalf of the community. The Foundation is a US 501(c)(3), international in scope, closely affiliated with Health Level Seven International. HL7 maintains the standard; fhir.org focuses on use and implementation.</p>
+            <p>Start with the specification overview at <a href="https://hl7.org/fhir/overview.html">hl7.org/fhir/overview.html</a>, the resource list and the Patient resource, then return here for guided conversation videos.</p>
+            <p>Foundation services you will use later: Implementation Guide registry, SMART-on-FHIR app registry, design registry, general application registry, monthly product reports, and conformance testing.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="foundation">
+      <div class="wrap">
+        <h2>The building blocks you cannot skip</h2>
+        <p class="intro">Every FHIR conversation — clinical or technical — comes back to resources, shared datatypes, narrative, references, and a small set of exchange paradigms. Miss any of these and the rest of the specification will feel like a pile of XML.</p>
+        <div class="cards">
+          <article class="card">
+            <span class="num">01 · Resource</span>
+            <h3>All exchangeable content is a resource</h3>
+            <p>Resources share a common way to define and represent content, built from reusable datatypes; a common set of metadata; and a human-readable part. Uses range from CarePlan and DiagnosticReport to MessageHeader and CapabilityStatement.</p>
+          </article>
+          <article class="card">
+            <span class="num">02 · Composition</span>
+            <h3>Combine resources for a use case</h3>
+            <p>FHIR modeling uses composition. Specific use cases are usually implemented by combining resources through references, then tailoring them with StructureDefinition constraints and a CapabilityStatement of the interfaces an implementation exposes.</p>
+          </article>
+          <article class="card">
+            <span class="num">03 · Narrative</span>
+            <h3>People can still read the record</h3>
+            <p>Each resource carries narrative text. That is a safety feature: software may ignore an extension it does not understand; a clinician should still be able to read what happened. Formats are JSON and XML, with RDF also specified.</p>
+          </article>
+          <article class="card">
+            <span class="num">04 · REST</span>
+            <h3>Four paradigms, REST first</h3>
+            <p>Exchange happens via REST, Documents, Messages, and Services. REST is the filing-cabinet model: one cabinet per type, one folder per instance, papers as versions. HTTP GET, POST, PUT, PATCH, DELETE, search, history, and operations such as $everything.</p>
+          </article>
+          <article class="card">
+            <span class="num">05 · Terminology</span>
+            <h3>Codes make data comparable</h3>
+            <p>LOINC, SNOMED CT, RxNorm, ICD, and local systems are bound through CodeSystem, ValueSet, and ConceptMap. Bindings may be required, extensible, preferred, or example — and Implementation Guides tell you which.</p>
+          </article>
+          <article class="card">
+            <span class="num">06 · Conformance</span>
+            <h3>IGs turn the platform into a contract</h3>
+            <p>The base spec is a platform. National programs and clinical societies publish Implementation Guides that define the real exchange. Registries at fhir.org and registry.fhir.org are the catalog. Test what you claim with CapabilityStatement and connectathon scripts.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>Modules of the specification</h2>
+        <p class="intro">The FHIR specification is organized as modules. You do not read them in a single sitting. You use this map so you always know which chapter owns the question in front of you.</p>
+        <div class="modules">
+          <div class="module"><strong>Foundation</strong><span>Definitional infrastructure the rest of the specification is built on.</span></div>
+          <div class="module"><strong>Implementer Support</strong><span>Services and guidance that help people actually implement the spec.</span></div>
+          <div class="module"><strong>Security &amp; Privacy</strong><span>How to create and maintain security, integrity, and privacy, including SMART App Launch.</span></div>
+          <div class="module"><strong>Conformance</strong><span>Testing conformance and defining Implementation Guides.</span></div>
+          <div class="module"><strong>Terminology</strong><span>Use and support of terminologies and related artifacts.</span></div>
+          <div class="module"><strong>Exchange / Linked Data</strong><span>Defined methods of exchanging resources, including REST and other paradigms.</span></div>
+          <div class="module"><strong>Administration</strong><span>Patients, practitioners, organizations, devices, substances, and related tracking resources.</span></div>
+          <div class="module"><strong>Clinical</strong><span>Problems, allergies, care process, care plans, referrals, and related clinical content.</span></div>
+          <div class="module"><strong>Medications</strong><span>Medication management and immunization tracking.</span></div>
+          <div class="module"><strong>Diagnostics</strong><span>Observations, diagnostic reports and requests, and related content.</span></div>
+          <div class="module"><strong>Workflow</strong><span>Managing the process of care and technical artifacts for obligation management.</span></div>
+          <div class="module"><strong>Financial</strong><span>Billing and claiming support.</span></div>
+          <div class="module"><strong>Clinical Reasoning</strong><span>Clinical decision support and quality measures.</span></div>
+          <div class="module"><strong>Medication Definition</strong><span>Detailed medication definitions for regulatory and drug-dictionary use.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="video-stage" id="videos">
+      <div class="wrap">
+        <h2 style="color:#fff;margin-bottom:8px;">Interactive conversation videos</h2>
+        <p class="intro" style="color:#c5d0dc;">This is the Phase 1 MVP. Two instructors speak in turn, with recorded voice on by default. The active portrait is full color; the listener is dimmed. Captions follow the audio. On a phone the portraits stack. Press Play, then use the playlist to move through every core topic.</p>
+        <div class="video-layout">
+          <aside>
+            <div class="playlist">
+              <h3>Lesson playlist</h3>
+              <div id="playlist"></div>
+            </div>
+          </aside>
+          <div class="player" aria-label="Conversation video player">
+            <p id="topicTitle" class="kicker" style="padding:14px 18px 0;margin:0;">1. What is FHIR?</p>
+            <div class="scene">
+              <figure class="speaker active" id="mayaCard">
+                <img src="assets/images/speaker-maya.jpg" alt="Dr. Maya Krishnan speaking">
+                <figcaption>Dr. Maya Krishnan<small>Clinical informaticist</small></figcaption>
+              </figure>
+              <figure class="speaker" id="alexCard">
+                <img src="assets/images/speaker-alex.jpg" alt="Alex Duarte speaking">
+                <figcaption>Alex Duarte<small>FHIR implementer</small></figcaption>
+              </figure>
+            </div>
+            <audio id="lineAudio" preload="none"></audio>
+            <div class="caption-bar">
+              <p class="who" id="who">Dr. Maya Krishnan · Clinical informaticist</p>
+              <p class="line" id="line">Press Play to hear the first conversation. Sound is on.</p>
+              <p class="audio-status" id="audioStatus">Press Play to hear this conversation.</p>
+            </div>
+            <div class="controls">
+              <button type="button" id="prevBtn">Previous</button>
+              <button type="button" id="playBtn" aria-pressed="false">Play</button>
+              <button type="button" id="nextBtn">Next</button>
+              <div class="progress-wrap" aria-hidden="true"><div class="progress" id="progress"></div></div>
+              <span class="time" id="time">0 / 0</span>
+              <label class="time">Speed
+                <select id="speed">
+                  <option value="0.75">0.75×</option>
+                  <option value="1" selected>1×</option>
+                  <option value="1.25">1.25×</option>
+                  <option value="1.5">1.5×</option>
+                </select>
+              </label>
+              <label class="time"><input type="checkbox" id="voiceToggle" checked> Sound on</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="curriculum">
+      <div class="wrap">
+        <h2>Curriculum map — nothing essential left out</h2>
+        <p class="intro">Phase 1 publishes the full outline and the conversation videos. Later phases turn each row into a hands-on topic. The table is the contract for what the finished L&amp;D program must cover.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Topic</th>
+                <th>What you must be able to explain</th>
+                <th>Primary references</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>FHIR and the Foundation</td>
+                <td>What FHIR is; Foundation vs HL7; why implementer education sits at fhir.org; trademark and community norms.</td>
+                <td>fhir.org, fhir.org/about.html</td>
+              </tr>
+              <tr>
+                <td>Overview and history</td>
+                <td>Digitized records; v2, v3/RIM, CDA lineage; simplify implementation without losing integrity; composition vs model-by-constraint.</td>
+                <td>hl7.org/fhir/overview.html</td>
+              </tr>
+              <tr>
+                <td>Resources</td>
+                <td>Common characteristics; Patient as the first deep read; narrative; references; metadata; examples and mappings.</td>
+                <td>Resource list, Patient, “About Resources”</td>
+              </tr>
+              <tr>
+                <td>Datatypes and formats</td>
+                <td>Reusable datatypes; JSON and XML; when RDF appears; how to read the concise XML-like definitions and the detailed tabs.</td>
+                <td>Datatypes, Formats</td>
+              </tr>
+              <tr>
+                <td>RESTful API</td>
+                <td>Read, vread, update, patch, delete, create, search, history, batch/transaction, operations; CapabilityStatement.</td>
+                <td>HTTP, Search, Operations</td>
+              </tr>
+              <tr>
+                <td>Documents, messages, services</td>
+                <td>When not to use REST; Composition + Bundle; MessageHeader; service operations.</td>
+                <td>Exchange module, clinical overview</td>
+              </tr>
+              <tr>
+                <td>Extensibility and profiling</td>
+                <td>Extensions; StructureDefinition; Must Support; slicing; ImplementationGuide resource.</td>
+                <td>Extensibility, Profiling</td>
+              </tr>
+              <tr>
+                <td>Terminology</td>
+                <td>Coding vs CodeableConcept; CodeSystem, ValueSet, ConceptMap; binding strength; $expand and $validate-code.</td>
+                <td>Terminology module</td>
+              </tr>
+              <tr>
+                <td>Clinical resources</td>
+                <td>Condition, AllergyIntolerance, Observation, DiagnosticReport, Procedure, CarePlan, Goal, Encounter.</td>
+                <td>Clinical module</td>
+              </tr>
+              <tr>
+                <td>Medications and immunizations</td>
+                <td>Medication, MedicationRequest, MedicationDispense, MedicationAdministration, Immunization.</td>
+                <td>Medications module</td>
+              </tr>
+              <tr>
+                <td>Workflow and financial</td>
+                <td>Task, Appointment, ServiceRequest; Claim, Coverage, ExplanationOfBenefit at a working literacy level.</td>
+                <td>Workflow, Financial</td>
+              </tr>
+              <tr>
+                <td>Security, privacy, SMART</td>
+                <td>TLS, OAuth 2.0, EHR vs standalone launch, scopes, backend services, Consent, AuditEvent, Provenance.</td>
+                <td>SMART App Launch IG, Security</td>
+              </tr>
+              <tr>
+                <td>Implementation Guides</td>
+                <td>Platform vs realm IG; US Core and IPS as examples; registry.fhir.org; how to read an IG as a contract.</td>
+                <td>fhir.org/guides/registry, registry.fhir.org</td>
+              </tr>
+              <tr>
+                <td>Testing and community</td>
+                <td>Connectathons, conformance testing, Jira change requests, Chat.fhir.org, work groups, Stack Overflow tag.</td>
+                <td>fhir.org community links, HL7 Jira</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="start">
+      <div class="wrap">
+        <h2>Where to start — the official road map</h2>
+        <p class="intro">The specification editors tell first-time readers exactly how to enter the material. We follow that order so this L&amp;D program does not invent a competing canon.</p>
+        <div class="path">
+          <article class="step">
+            <div class="step-num">1</div>
+            <div>
+              <h3>Skim the resource list</h3>
+              <p>Get a sense of what exists before you memorize any one resource. Notice administrative, clinical, diagnostic, medication, workflow, financial, and infrastructure families.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-num">2</div>
+            <div>
+              <h3>Read Patient end to end</h3>
+              <p>Patient shows what a resource definition looks like: identity, human name, telecom, gender, birthDate, address, photo, contact, communication, general practitioner, managing organization, and link.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-num">3</div>
+            <div>
+              <h3>Background pages</h3>
+              <p>Resource definitions; narrative and references; XML and JSON formats; extensibility. If you already know v2, v3, or CDA, read the relationship pages next so you do not map old habits blindly.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-num">4</div>
+            <div>
+              <h3>Use the header tabs</h3>
+              <p>Many readers miss them. Resources are shown in a concise XML-like view and in detailed descriptions, with mappings, examples, profiles, and design notes. Train yourself to switch tabs.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-num">5</div>
+            <div>
+              <h3>Then write software</h3>
+              <p>The specification is targeted at people who will write the software. It is kept concise on purpose. Ambiguity, alternatives, and future plans live on Confluence, chat, and formal change requests — not always in the normative pages.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="community">
+      <div class="wrap">
+        <h2>Community, registries, and Foundation services</h2>
+        <p class="intro">A professional FHIR education does not end at the textbook. These are the same buckets fhir.org puts on its home page, written here as an implementer checklist.</p>
+        <div class="links">
+          <article class="link-card">
+            <h3>Community support</h3>
+            <p>FHIR Chat channels, HL7 work group participation, and implementer question forums. Formal specification changes go through HL7 Jira. Confluence holds methodology and design discussion that is not itself the conformance source.</p>
+          </article>
+          <article class="link-card">
+            <h3>Registries</h3>
+            <p>Implementation Guides, the design registry, the SMART-on-FHIR app registry, and the general application registry. The full IG catalog is at registry.fhir.org. New guides are registered by GitHub pull request or by contacting the FHIR Director.</p>
+          </article>
+          <article class="link-card">
+            <h3>Foundation services</h3>
+            <p>Monthly product reports, conformance testing, and the public explanation of fhir.org and the HL7 FHIR Foundation. Trademark use applications cover community and product use of the FHIR name and flame design.</p>
+          </article>
+          <article class="link-card">
+            <h3>Services for implementers</h3>
+            <p>Implementation Guides hosted by the Foundation, SMART App Launch as the dominant app pattern, and Bulk Data for population-scale export. These are how “we have an API” becomes “we participate in the ecosystem.”</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <strong>FHIR L&amp;D · Phase 1</strong>
+          <p>HTML landing page, full briefing copy, and responsive conversation videos only. After review, the same content will move to Angular, Spring Boot, and PostgreSQL without dropping topics.</p>
+        </div>
+        <div>
+          <strong>Canonical sources</strong>
+          <p><a href="https://fhir.org/">fhir.org</a><br>
+          <a href="https://fhir.org/about.html">About the Foundation</a><br>
+          <a href="https://hl7.org/fhir/">HL7 FHIR specification</a><br>
+          <a href="https://fhir.org/guides/registry/">IG Registry</a></p>
+        </div>
+        <div>
+          <strong>Contact (official)</strong>
+          <p>HL7 FHIR Foundation: grahame@hl7.org as listed on fhir.org. This educational preview is independent and is not an HL7 publication.</p>
+        </div>
+      </div>
+      <p class="legal">FHIR® and the Flame Design mark are the registered trademarks of HL7® and are used here only to identify the publicly documented standard, with the permission model described by HL7 and the FHIR Foundation. This site does not reproduce the Flame mark as a product logo. Content is adapted from publicly available FHIR Foundation and HL7 FHIR R5 overview materials for learning. Always treat hl7.org/fhir as authoritative for conformance.</p>
+    </div>
+  </footer>
+
+  <script src="js/conversations.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

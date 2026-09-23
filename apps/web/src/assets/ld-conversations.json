@@ -1,0 +1,650 @@
+[
+  {
+    "slug": "what-is-fhir",
+    "title": "What is FHIR?",
+    "keywords": [
+      "what",
+      "is",
+      "fhir?"
+    ],
+    "conversation": [
+      {
+        "speaker": "maya",
+        "text": "Welcome to FHIR Learning & Development. I am Dr. Maya Krishnan, a clinical informaticist. Today we start with the question every newcomer asks: what is FHIR, and why does healthcare keep talking about it?",
+        "audioPath": "assets/audio/what-is-fhir-0.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "I am Alex Duarte, a FHIR implementer. FHIR stands for Fast Healthcare Interoperability Resources. It is an HL7 specification for exchanging healthcare information electronically \u2014 clinical, administrative, financial, and public-health data.",
+        "audioPath": "assets/audio/what-is-fhir-1.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "The problem it solves is simple to feel and hard to fix. Patients move across clinics, hospitals, labs, pharmacies, payers, and apps. Their records must be available, discoverable, and understandable \u2014 by people and by machines.",
+        "audioPath": "assets/audio/what-is-fhir-2.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "HL7 has worked on that for decades with v2 messaging, v3, the RIM, and CDA. FHIR is a newer specification informed by those lessons. It aims to simplify implementation without sacrificing information integrity.",
+        "audioPath": "assets/audio/what-is-fhir-3.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "Think of FHIR resources as shared electronic forms: one shape for a patient, one for an allergy, one for a lab observation, one for a medication request. Systems can fill, store, search, and send those forms in a consistent way.",
+        "audioPath": "assets/audio/what-is-fhir-4.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Under the hood those forms are defined resources with common metadata, reusable datatypes, a human-readable narrative, and machine-processable XML or JSON. You can also use RDF. REST is the most common exchange style, but it is not the only one.",
+        "audioPath": "assets/audio/what-is-fhir-5.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "That combination \u2014 clinically meaningful chunks plus web-native APIs \u2014 is why FHIR became the focus of so much health IT work, including SMART apps, national implementation guides, and bulk data export.",
+        "audioPath": "assets/audio/what-is-fhir-6.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Official starting points live at fhir.org for implementers and at hl7.org/fhir for the specification. This L&D site is a guided classroom around that material \u2014 not a replacement for the standard.",
+        "audioPath": "assets/audio/what-is-fhir-7.mp3"
+      }
+    ],
+    "match": [
+      "what is fhir",
+      "fhir overview",
+      "introduction to fhir",
+      "fhir foundation",
+      "fast healthcare"
+    ]
+  },
+  {
+    "slug": "why-fhir",
+    "title": "Why FHIR exists",
+    "keywords": [
+      "why",
+      "fhir",
+      "exists"
+    ],
+    "conversation": [
+      {
+        "speaker": "maya",
+        "text": "Before FHIR, interoperability often meant sending large documents or brittle messages. A clinician might receive a 20-page CCD when they only needed the latest potassium and the active allergy list.",
+        "audioPath": "assets/audio/why-fhir-0.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "FHIR\u2019s design goal is granular access. A client can ask for Patient/123, or search Observation?patient=123&code=29463-7, instead of parsing an entire dump. That is closer to how modern web applications work.",
+        "audioPath": "assets/audio/why-fhir-1.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "Clinically, that matters for decision support, quality measurement, patient-facing apps, and care coordination. If the data is structured and coded, software can alert, trend, and reconcile \u2014 not just display a PDF.",
+        "audioPath": "assets/audio/why-fhir-2.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "FHIR also keeps a human-readable narrative inside every resource. If a receiving system does not understand an extension, a person can still read the story. Integrity for machines, safety for people.",
+        "audioPath": "assets/audio/why-fhir-3.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "And FHIR was never meant to erase v2 or CDA overnight. The specification says it can stand alone or work in partnership with those widely used standards. Mapping tables exist for a reason.",
+        "audioPath": "assets/audio/why-fhir-4.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "The other reason FHIR spread quickly: implementer experience. Open tooling, public test servers, connectathons, Implementation Guides, and a REST surface that software engineers already understand.",
+        "audioPath": "assets/audio/why-fhir-5.mp3"
+      }
+    ],
+    "match": [
+      "why fhir",
+      "why hl7",
+      "interoperability challenge",
+      "why not v2"
+    ]
+  },
+  {
+    "slug": "resources",
+    "title": "Resources: the building blocks",
+    "keywords": [
+      "resources:",
+      "the",
+      "building",
+      "blocks"
+    ],
+    "conversation": [
+      {
+        "speaker": "alex",
+        "text": "The basic building block in FHIR is a Resource. All exchangeable content is defined as a resource. That is the sentence to memorize before you open the spec.",
+        "audioPath": "assets/audio/resources-0.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "From a clinical view, resources are like paper forms: AllergyIntolerance, Condition, MedicationRequest, DiagnosticReport, Encounter, CarePlan. Each form captures one kind of real-world thing.",
+        "audioPath": "assets/audio/resources-1.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Every resource shares a common pattern: an identity, metadata such as lastUpdated and profile, a human-readable text narrative, and a set of data elements built from shared datatypes.",
+        "audioPath": "assets/audio/resources-2.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "Resources refer to each other. A MedicationRequest points at a Patient, a Practitioner, and a Medication. An Observation points at the Patient and often at the Encounter. Composition is how you assemble a document.",
+        "audioPath": "assets/audio/resources-3.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "If you are new, do this in order: skim the resource list, then study Patient end to end, then Observation, then Bundle. Patient shows identifiers, names, telecom, address, communication, and links between records.",
+        "audioPath": "assets/audio/resources-4.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "Not every resource is clinical. CapabilityStatement describes what a server can do. StructureDefinition constrains a resource for a use case. CodeSystem and ValueSet carry terminology. Provenance records why a change happened.",
+        "audioPath": "assets/audio/resources-5.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Most resources include examples, mappings to v2, CDA, or DICOM where appropriate, and a maturity model. Do not treat every element as mandatory. Cardinality and Must Support rules live in the profile you actually implement.",
+        "audioPath": "assets/audio/resources-6.mp3"
+      }
+    ],
+    "match": [
+      "resource",
+      "resources",
+      "patient resource",
+      "resource types",
+      "bundle"
+    ]
+  },
+  {
+    "slug": "rest-exchange",
+    "title": "REST and the four paradigms",
+    "keywords": [
+      "rest",
+      "and",
+      "the",
+      "four",
+      "paradigms"
+    ],
+    "conversation": [
+      {
+        "speaker": "alex",
+        "text": "FHIR defines four primary exchange paradigms: REST, Documents, Messages, and Services. REST is the simplest and the one most learning programs start with.",
+        "audioPath": "assets/audio/rest-exchange-0.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "The clinical metaphor I use: a RESTful server is a room of filing cabinets. One cabinet per resource type. Each folder is one real-world instance \u2014 one patient, one encounter \u2014 and papers in the folder are versions.",
+        "audioPath": "assets/audio/rest-exchange-1.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "The HTTP verbs map cleanly. GET read or search. POST create. PUT update. PATCH partial update. DELETE remove where policy allows. HISTORY lets you walk those versions. A typical read is GET [base]/Patient/123.",
+        "audioPath": "assets/audio/rest-exchange-2.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "Search is where clinicians feel the benefit. Find active problems, labs since yesterday, or medications that are still on the list. Search parameters are defined per resource, plus common ones like _id, _lastUpdated, and _include.",
+        "audioPath": "assets/audio/rest-exchange-3.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Documents package a Bundle with a Composition \u2014 think discharge summary or patient summary. Messages use a Bundle with MessageHeader for event-driven workflows. Services cover operation-style RPC such as $validate or $everything.",
+        "audioPath": "assets/audio/rest-exchange-4.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "You do not have to use REST to use resources. A national network might drop FHIR documents on a transport you already have. A lab might send FHIR messages. Learn REST first, then pick the paradigm the use case demands.",
+        "audioPath": "assets/audio/rest-exchange-5.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "CapabilityStatement is how a server advertises which resource types, interactions, search parameters, and operations it actually supports. Never assume a test server\u2019s behavior is your production EHR.",
+        "audioPath": "assets/audio/rest-exchange-6.mp3"
+      }
+    ],
+    "match": [
+      "rest",
+      "http",
+      "search",
+      "crud",
+      "exchange",
+      "operations",
+      "$everything"
+    ]
+  },
+  {
+    "slug": "formats-extensibility",
+    "title": "Formats, narrative, extensions",
+    "keywords": [
+      "formats,",
+      "narrative,",
+      "extensions"
+    ],
+    "conversation": [
+      {
+        "speaker": "alex",
+        "text": "FHIR instances are usually JSON or XML. JSON is dominant in new APIs. XML remains important for document-centric and enterprise stacks. The information model is the same; only the surface syntax changes.",
+        "audioPath": "assets/audio/formats-extensibility-0.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "The narrative \u2014 Resource.text \u2014 is not optional thinking. It is the human-readable representation. If an extension or coded element is missed by software, a clinician should still be able to read what was meant.",
+        "audioPath": "assets/audio/formats-extensibility-1.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Extensibility is how FHIR stays small in the core and still covers local needs. Rather than putting every national identifier or local workflow flag into the base resource, you add an extension with a canonical URL.",
+        "audioPath": "assets/audio/formats-extensibility-2.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "That is the opposite of HL7 v3\u2019s model-by-constraint in important ways. FHIR gives a composable core, then Implementation Guides constrain optionality, cardinality, terminology, and extensions for a specific exchange.",
+        "audioPath": "assets/audio/formats-extensibility-3.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "StructureDefinition is the computable form of those rules. CapabilityStatement says what an endpoint does. Together they are how you go from \u201cFHIR in general\u201d to \u201cthis hospital, this app, this national spec.\u201d",
+        "audioPath": "assets/audio/formats-extensibility-4.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "When you hear Must Support, it does not always mean the element is required to be present. It means if you have the data, you must be able to produce or consume it as the guide defines. Read the guide\u2019s definition carefully.",
+        "audioPath": "assets/audio/formats-extensibility-5.mp3"
+      }
+    ],
+    "match": [
+      "json",
+      "xml",
+      "extension",
+      "narrative",
+      "datatype",
+      "formats"
+    ]
+  },
+  {
+    "slug": "terminology",
+    "title": "Terminology that makes data comparable",
+    "keywords": [
+      "terminology",
+      "that",
+      "makes",
+      "data",
+      "comparable"
+    ],
+    "conversation": [
+      {
+        "speaker": "maya",
+        "text": "A lab value without a code is a number floating in space. FHIR binds elements to terminologies so potassium, diabetes, and a flu vaccine mean the same thing across systems.",
+        "audioPath": "assets/audio/terminology-0.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "You will live in three artifacts: CodeSystem \u2014 the dictionary of codes; ValueSet \u2014 the allowed subset for a context; ConceptMap \u2014 translations between systems. NamingSystem describes identifier systems.",
+        "audioPath": "assets/audio/terminology-1.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "Common clinical bindings include LOINC for observations and documents, SNOMED CT for problems and procedures, RxNorm or local medication dictionaries for drugs, and ICD for billing or mortality in many regions.",
+        "audioPath": "assets/audio/terminology-2.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "CodeableConcept lets you send a coded coding plus optional text. You can include more than one coding \u2014 for example SNOMED and a local code \u2014 which is essential during migration.",
+        "audioPath": "assets/audio/terminology-3.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "Terminology services matter in production. $expand, $validate-code, and $translate keep ValueSets computable. Do not hard-code giant lists in every app if a terminology server can govern them.",
+        "audioPath": "assets/audio/terminology-4.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Implementation Guides will tell you required versus extensible versus preferred versus example bindings. Required means you may not send a code outside the set. That is a conformance rule, not a suggestion.",
+        "audioPath": "assets/audio/terminology-5.mp3"
+      }
+    ],
+    "match": [
+      "terminology",
+      "valueset",
+      "codesystem",
+      "loinc",
+      "snomed",
+      "coding",
+      "binding"
+    ]
+  },
+  {
+    "slug": "security-smart",
+    "title": "Security, privacy, SMART apps",
+    "keywords": [
+      "security,",
+      "privacy,",
+      "smart",
+      "apps"
+    ],
+    "conversation": [
+      {
+        "speaker": "maya",
+        "text": "Interoperability without authorization is a breach waiting to happen. FHIR assumes TLS in production, authenticates the client and often the user, and authorizes at a clinically meaningful scope \u2014 down to patient and category where required.",
+        "audioPath": "assets/audio/security-smart-0.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "SMART App Launch is the common pattern. It uses OAuth 2.0 so a third-party app can launch inside an EHR or stand alone, obtain an access token, and call the FHIR API with scopes such as patient/Observation.read.",
+        "audioPath": "assets/audio/security-smart-1.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "There are two launch flavors clinicians should recognize. EHR launch: the user is already in the chart and opens an app with patient context. Standalone launch: the user starts in the app and then selects a provider to connect.",
+        "audioPath": "assets/audio/security-smart-2.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Discovery uses .well-known/smart-configuration on the FHIR base URL. The app learns authorization_endpoint, token_endpoint, and capabilities, then follows the authorization-code flow, optionally with PKCE.",
+        "audioPath": "assets/audio/security-smart-3.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "Backend services \u2014 also called SMART for Backend Services \u2014 cover headless jobs: bulk export, decision support without a clinician click, payer-to-provider pipelines. Those use system scopes and signed client assertions, not a browser login.",
+        "audioPath": "assets/audio/security-smart-4.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Security also includes AuditEvent, Provenance, Consent, and Signature. Break-the-glass, minors\u2019 privacy, and sensitive diagnoses are policy problems that your profiles and scopes must encode \u2014 the REST verbs will not do it for you.",
+        "audioPath": "assets/audio/security-smart-5.mp3"
+      }
+    ],
+    "match": [
+      "smart",
+      "oauth",
+      "security",
+      "authorization",
+      "launch",
+      "scopes"
+    ]
+  },
+  {
+    "slug": "implementation-guides",
+    "title": "Implementation Guides and registries",
+    "keywords": [
+      "implementation",
+      "guides",
+      "and",
+      "registries"
+    ],
+    "conversation": [
+      {
+        "speaker": "alex",
+        "text": "The base FHIR specification is a platform. It defines capabilities and an ecosystem. It does not, by itself, tell a US hospital, an NHS trust, or a lab network exactly which elements to send tomorrow morning.",
+        "audioPath": "assets/audio/implementation-guides-0.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "That is the job of Implementation Guides. National programs, vendor consortiums, and clinical societies publish IGs that constrain resources, bind terminology, and define the actual exchange.",
+        "audioPath": "assets/audio/implementation-guides-1.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "fhir.org hosts community entry points: Implementation Guide registry, SMART-on-FHIR app registry, design registry, and general application registry. The full IG catalog is also at registry.fhir.org.",
+        "audioPath": "assets/audio/implementation-guides-2.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "You will meet guides such as US Core, International Patient Summary, SMART App Launch, Bulk Data, and countless realm-specific lab, imaging, and quality guides. Always implement the IG your contract names \u2014 not a generic Patient you invented.",
+        "audioPath": "assets/audio/implementation-guides-3.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Conformance testing, monthly product reports, and connectathons exist so implementers can prove behavior. CapabilityStatement plus IG constraints plus test scripts are how \u201cwe support FHIR\u201d becomes something you can verify.",
+        "audioPath": "assets/audio/implementation-guides-4.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "If you need to publish a guide, the Foundation documents registration via GitHub pull request or a submission to the FHIR Director. Treat published IGs as living contracts with versioning.",
+        "audioPath": "assets/audio/implementation-guides-5.mp3"
+      }
+    ],
+    "match": [
+      "implementation guide",
+      "ig",
+      "us core",
+      "profiling",
+      "structuredefinition"
+    ]
+  },
+  {
+    "slug": "clinical",
+    "title": "Clinical resources in practice",
+    "keywords": [
+      "clinical",
+      "resources",
+      "in",
+      "practice"
+    ],
+    "conversation": [
+      {
+        "speaker": "maya",
+        "text": "A chart is not one giant document. It is a Patient, the Encounter in front of you, then the active problems, allergies, meds, and the last labs \u2014 each as its own resource, linked by references.",
+        "audioPath": "assets/audio/clinical-0.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Condition carries problems and diagnoses. AllergyIntolerance carries substances and reactions. Observation is the workhorse for vitals and laboratory results, with a code, a value, a time, and a subject.",
+        "audioPath": "assets/audio/clinical-1.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "DiagnosticReport is the clinician-facing wrapper \u2014 the pathologist\u2019s or radiologist\u2019s report \u2014 that points at the Observations underneath. Procedure is what was performed. Encounter is the context of the visit.",
+        "audioPath": "assets/audio/clinical-2.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "When you search, think clinically: Condition?patient=123&clinical-status=active. Observation?patient=123&code=http://loinc.org|29463-7 for body weight. Include the Encounter when the IG says you must.",
+        "audioPath": "assets/audio/clinical-3.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "CarePlan and Goal are how teams share intent, not just history. If you only send problems and labs, you have a rear-view mirror. Plans tell the next clinician what we are trying to do.",
+        "audioPath": "assets/audio/clinical-4.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Status is a safety issue. A refuted allergy that still looks active can block a needed drug. A preliminary Observation that looks final can drive a wrong decision. Read the status value sets before you map your EHR flags.",
+        "audioPath": "assets/audio/clinical-5.mp3"
+      }
+    ],
+    "match": [
+      "clinical",
+      "observation",
+      "encounter",
+      "condition",
+      "allergy",
+      "care plan"
+    ]
+  },
+  {
+    "slug": "medications",
+    "title": "Medications and immunizations",
+    "keywords": [
+      "medications",
+      "and",
+      "immunizations"
+    ],
+    "conversation": [
+      {
+        "speaker": "alex",
+        "text": "If you remember one chain, remember this: request, dispense, administer. MedicationRequest is intent. Dispense is supply. Administration is the event that reached the patient.",
+        "audioPath": "assets/audio/medications-0.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "Clinicians live on the medication list and the immunization history. A request that was never dispensed is not the same as a dose that was given. Status again: active, completed, stopped, on-hold.",
+        "audioPath": "assets/audio/medications-1.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Code the product with RxNorm or your national dictionary. Include sig text in addition to structured dosage when the IG allows it \u2014 pharmacists still read sentences.",
+        "audioPath": "assets/audio/medications-2.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "Immunization is its own resource because public health and clinical decision support need lot, occurrence, and protocol. A flu shot is not just a Procedure with a vague code if you can send Immunization.",
+        "audioPath": "assets/audio/medications-3.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "When mapping an EHR, decide where PRN meds, infusions, and patient-reported supplements live. Mixing them into one list without status and category is how reconciliation fails.",
+        "audioPath": "assets/audio/medications-4.mp3"
+      }
+    ],
+    "match": [
+      "medication",
+      "pharmacy",
+      "dispense",
+      "statement",
+      "request"
+    ]
+  },
+  {
+    "slug": "workflow-financial",
+    "title": "Workflow and financial resources",
+    "keywords": [
+      "workflow",
+      "and",
+      "financial",
+      "resources"
+    ],
+    "conversation": [
+      {
+        "speaker": "maya",
+        "text": "A referral is not a PDF in a fax machine if we can help it. ServiceRequest says what is asked. Task says who is chasing it. Appointment says when the patient will be seen.",
+        "audioPath": "assets/audio/workflow-financial-0.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Workflow resources exist because clinical content does not carry obligation. An Observation does not assign a nurse. A Task does. Pair them instead of overloading Condition with to-do semantics.",
+        "audioPath": "assets/audio/workflow-financial-1.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "On the financial side, clinicians still need Coverage at the front desk and after the visit. If Coverage is missing or expired, care coordination stalls even when the clinical FHIR is perfect.",
+        "audioPath": "assets/audio/workflow-financial-2.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Claim and ExplanationOfBenefit are how payers and providers reconcile money. Map them only when your use case is prior auth, attachments, or consumer billing transparency \u2014 not because someone said \u201cput everything in FHIR.\u201d",
+        "audioPath": "assets/audio/workflow-financial-3.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "Prior authorization often combines ServiceRequest, Claim, and Task. Read the Da Vinci or national IGs before inventing a local bundle.",
+        "audioPath": "assets/audio/workflow-financial-4.mp3"
+      }
+    ],
+    "match": [
+      "workflow",
+      "claim",
+      "coverage",
+      "task",
+      "appointment",
+      "financial"
+    ]
+  },
+  {
+    "slug": "testing-community",
+    "title": "Testing, connectathons, and community",
+    "keywords": [
+      "testing,",
+      "connectathons,",
+      "and",
+      "community"
+    ],
+    "conversation": [
+      {
+        "speaker": "alex",
+        "text": "If your CapabilityStatement says you search Observation by patient and code, a test script should fail you when you do not. Write the statement last, after the server behaves, or you will advertise fiction.",
+        "audioPath": "assets/audio/testing-community-0.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "Connectathons are not optional theater. They are where clinical scenarios meet other people\u2019s interpretations. Bring real examples, not only happy-path Patient/example.",
+        "audioPath": "assets/audio/testing-community-1.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "When the spec is unclear, ask on chat with a minimal resource and the IG version. Then file Jira if the text should change. Do not silently invent a private profile and call it FHIR.",
+        "audioPath": "assets/audio/testing-community-2.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "Community also means ethics and trademark. This educational site identifies the standard; it is not an HL7 publication. Treat hl7.org/fhir as authoritative for conformance.",
+        "audioPath": "assets/audio/testing-community-3.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Your last job in this curriculum is to pick a track: implementer, informaticist, or product owner \u2014 and join the matching work group list. FHIR is maintained by people who show up.",
+        "audioPath": "assets/audio/testing-community-4.mp3"
+      }
+    ],
+    "match": [
+      "testing",
+      "connectathon",
+      "community",
+      "touchstone",
+      "validator"
+    ]
+  },
+  {
+    "slug": "getting-started",
+    "title": "How to start learning and building",
+    "keywords": [
+      "how",
+      "to",
+      "start",
+      "learning",
+      "and",
+      "building"
+    ],
+    "conversation": [
+      {
+        "speaker": "maya",
+        "text": "If you are clinical: start with Patient, Encounter, Condition, AllergyIntolerance, Observation, MedicationRequest, and DiagnosticReport. Read the examples before the XML schema.",
+        "audioPath": "assets/audio/getting-started-0.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "If you are technical: stand up or use a public test server, GET a Patient, POST an Observation, search, then read CapabilityStatement. After that, add SMART auth and one Implementation Guide profile.",
+        "audioPath": "assets/audio/getting-started-1.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "Worked learning path on this site \u2014 later phases \u2014 will make each of those topics interactive: conversation first, then the resource walkthrough, then a short scenario you can complete.",
+        "audioPath": "assets/audio/getting-started-2.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "Do not skip community channels. FHIR Chat, HL7 work groups, Stack Overflow\u2019s fhir tag, and connectathons are how ambiguities get resolved. The spec is concise on purpose; implementer forums hold the rest.",
+        "audioPath": "assets/audio/getting-started-3.mp3"
+      },
+      {
+        "speaker": "maya",
+        "text": "And keep the ethics in view. Every Patient resource is a person. Minimum necessary access, accurate coding, and clear provenance are part of professional practice, not extras for the security chapter.",
+        "audioPath": "assets/audio/getting-started-4.mp3"
+      },
+      {
+        "speaker": "alex",
+        "text": "This program now runs the full path: landing, conversation videos, interactive labs, quizzes, and progress \u2014 on Angular, Spring Boot, and PostgreSQL. Keep the specification open beside you.",
+        "audioPath": "assets/audio/getting-started-5.mp3"
+      }
+    ],
+    "match": [
+      "getting started",
+      "first steps",
+      "how to start",
+      "begin"
+    ]
+  }
+]

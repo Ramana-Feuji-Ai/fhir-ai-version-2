@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: fhir-learning-api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fhirld
+    username: fhirld
+    password: fhirld
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: academy
+        hbm2ddl:
+          create_namespaces: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+          time_zone: UTC
+  flyway:
+    enabled: false
+
+server:
+  port: 18081
+
+fhir:
+  seed:
+    enabled: true
+    phases-json: ../../data/phases.spa.json
+  demo-learner-id: 11111111-1111-1111-1111-111111111111
+  cors:
+    allowed-origins:
+      - http://localhost:4200
+      - http://127.0.0.1:4200
+      - http://localhost:43211
+      - http://127.0.0.1:43211
+  auth:
+    jwt-secret: fhi-fhir-learning-dev-secret-change-me-32chars-min
+    jwt-expiration-minutes: 720
+    demo-email: mr@fhi.local
+    demo-password: "ChangeMe123!"
+  groq:
+    api-key: ${GROQ_API_KEY:}
+    base-url: https://api.groq.com/openai/v1
+    model: openai/gpt-oss-20b

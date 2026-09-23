@@ -1,0 +1,38 @@
+package com.fhi.fhirlearning.domain.phase;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "phase_lab")
+public class PhaseLab {
+
+    @Id
+    @Column(name = "phase_id")
+    private Short phaseId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "phase_id")
+    private Phase phase;
+
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false, columnDefinition = "text")
+    private String body;
+
+    public Short getPhaseId() { return phaseId; }
+    public Phase getPhase() { return phase; }
+    public void setPhase(Phase phase) { this.phase = phase; }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+    public String getBody() { return body; }
+    public void setBody(String body) { this.body = body; }
+}

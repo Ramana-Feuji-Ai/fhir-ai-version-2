@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: fhir-ld-api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fhirld
+    username: fhirld
+    password: fhirld
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+server:
+  port: 18081
+
+fhirld:
+  seed: true
+  cors: http://127.0.0.1:43211,http://localhost:43211
