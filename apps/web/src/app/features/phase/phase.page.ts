@@ -17,6 +17,8 @@ import { SlideDeckComponent } from '../slides/slide-deck.component';
         <div class="wrap">
           @if (openTopicId()) {
             <button type="button" class="back" (click)="closeTopic()">← Back to topics</button>
+          } @else if (courseSlug(); as slug) {
+            <a class="back" [routerLink]="['/courses', slug]">← Back to course</a>
           } @else {
             <a class="back" routerLink="/" fragment="courses">← Back to courses</a>
           }
@@ -623,6 +625,7 @@ export class PhasePage implements OnInit, OnDestroy {
   readonly collapsed = signal<Record<number, boolean>>({});
   readonly error = signal<string | null>(null);
   readonly resourcesExpanded = signal(false);
+  readonly courseSlug = signal<string | null>(null);
 
   readonly showResources = computed(() => {
     const p = this.phase();
@@ -638,6 +641,7 @@ export class PhasePage implements OnInit, OnDestroy {
           this.openTopicId.set(null);
           this.topicDetail.set(null);
           this.collapsed.set({});
+          this.courseSlug.set(this.route.snapshot.queryParamMap.get('course'));
           this.assistantContext.setPhase(p.id);
         },
         error: (e) => this.error.set(String(e?.message ?? e)),

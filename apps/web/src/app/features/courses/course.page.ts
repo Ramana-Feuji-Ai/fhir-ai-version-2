@@ -29,7 +29,7 @@ import { CourseStateService } from '../../core/course-state.service';
               <span class="metaPill">{{ selectedCourse.level }}</span>
               <span class="metaPill">{{ selectedCourse.duration }}</span>
               <span class="metaPill">{{ selectedCourse.studyHours }} study hours</span>
-              <span class="metaPill">{{ selectedCourse.phaseIds.length }} modules</span>
+              <button type="button" class="metaPill metaPillAction" (click)="scrollToModules()">{{ selectedCourse.phaseIds.length }} modules ↓</button>
             </div>
           </div>
           <aside class="enrollPanel">
@@ -43,18 +43,33 @@ import { CourseStateService } from '../../core/course-state.service';
               </button>
               @if (enrollError()) { <p class="enrollError" role="alert">{{ enrollError() }}</p> }
             } @else {
-              <div class="progressRing" [style.--pct]="completionPercent()">
+              <div class="progressRing" [style.--pct]="displayPercent()">
                 <svg viewBox="0 0 120 120" aria-hidden="true">
                   <circle class="ringTrack" cx="60" cy="60" r="52" />
                   <circle class="ringFill" cx="60" cy="60" r="52" />
                 </svg>
-                <div class="ringLabel"><strong>{{ completionPercent() }}%</strong><span>complete</span></div>
+                <div class="ringLabel"><strong>{{ displayPercent() }}%</strong><span>complete</span></div>
               </div>
               <p>{{ completedModules() }} of {{ selectedCourse.phaseIds.length }} modules completed</p>
+              <div class="moduleDots" role="list" aria-label="Module progress">
+                @for (ph of phases(); track ph.id) {
+                  <button
+                    type="button"
+                    class="dot"
+                    role="listitem"
+                    [class.done]="ph.completed"
+                    [class.current]="!ph.completed && nextPhase()?.id === ph.id"
+                    [title]="ph.title"
+                    [attr.aria-label]="ph.title + (ph.completed ? ' — completed' : '')"
+                    (click)="scrollToModule(ph.id)"
+                  ></button>
+                }
+              </div>
               @if (completionPercent() === 100) {
                 <div class="certificateNotice"><div><strong>Course complete 🎉</strong><span>Your certificate is ready to print.</span></div><button type="button" (click)="printCertificate(selectedCourse.slug)">Print certificate</button></div>
               } @else if (nextPhase(); as next) {
-                <a class="startButton" [routerLink]="['/phase', next.id]"><span>{{ completedModules() ? 'Continue course' : 'Start course' }}</span> <span aria-hidden="true" class="btnArrow">→</span></a>
+                <p class="nextUp"><span>Next up</span>{{ next.title }}</p>
+                <a class="startButton" [routerLink]="['/phase', next.id]" [queryParams]="{ course: selectedCourse.slug }"><span>{{ completedModules() ? 'Continue course' : 'Start course' }}</span> <span aria-hidden="true" class="btnArrow">→</span></a>
               }
             }
           </aside>
@@ -79,7 +94,7 @@ import { CourseStateService } from '../../core/course-state.service';
           <div class="factCard"><span>Practical outcome</span><strong>{{ selectedCourse.practicalOutcome }}</strong></div>
         </section>
 
-        <section class="modulesSection">
+        <section class="modulesSection" id="modulesSection">
           <div class="sectionHeading">
             <div>
               <p class="eyebrow">Curriculum</p>
@@ -89,7 +104,7 @@ import { CourseStateService } from '../../core/course-state.service';
           </div>
           <div class="moduleList">
             @for (phase of phases(); track phase.id; let index = $index) {
-              <article class="moduleRow" [class.complete]="phase.completed" [style.--i]="index">
+              <article class="moduleRow" [id]="'module-' + phase.id" [class.complete]="phase.completed" [style.--i]="index">
                 <div class="moduleNumber">{{ (index + 1).toString().padStart(2, '0') }}</div>
                 <div class="moduleCopy">
                   <p>Module {{ index + 1 }}</p>
@@ -100,7 +115,7 @@ import { CourseStateService } from '../../core/course-state.service';
                   <span>{{ phase.percentComplete }}%</span>
                   <div class="progressBar"><i [style.width.%]="phase.percentComplete"></i></div>
                 </div>
-                <a class="moduleLink" [routerLink]="['/phase', phase.id]" [attr.aria-label]="'Open ' + phase.title">{{ phase.completed ? 'Review' : 'Open' }} <span aria-hidden="true">→</span></a>
+                <a class="moduleLink" [routerLink]="['/phase', phase.id]" [queryParams]="{ course: selectedCourse.slug }" [attr.aria-label]="'Open ' + phase.title">{{ phase.completed ? 'Review' : 'Open' }} <span aria-hidden="true">→</span></a>
                 @if (phase.topicTitles?.length) {
                   <details class="topicList">
                     <summary>View topics</summary>
@@ -159,6 +174,28 @@ import { CourseStateService } from '../../core/course-state.service';
       transition: transform .18s ease, background .18s ease, border-color .18s ease;
     }
     .metaPill:hover { transform: translateY(-2px); background: rgba(255,255,255,.15); border-color: rgba(224,160,106,.5); }
+    .metaPillAction { appearance: none; font: inherit; cursor: pointer; }
+    .metaPillAction:hover { background: rgba(224,160,106,.28); border-color: rgba(224,160,106,.7); }
+
+    .moduleDots { display: flex; flex-wrap: wrap; gap: 7px; margin: 2px 0 18px; }
+    .dot {
+      width: 13px; height: 13px; padding: 0; border-radius: 50%; background: #fff;
+      border: 2px solid #D7E2EC; cursor: pointer;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+    }
+    .dot:hover { transform: scale(1.3); border-color: var(--gr6); }
+    .dot.done { background: var(--gr6); border-color: var(--gr6); }
+    .dot.current { border-color: var(--o7); box-shadow: 0 0 0 3px rgba(224,160,106,.28); animation: dotPulse 1.7s ease-in-out infinite; }
+    @keyframes dotPulse {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(224,160,106,.28); }
+      50% { box-shadow: 0 0 0 6px rgba(224,160,106,.12); }
+    }
+    .nextUp {
+      display: flex; flex-direction: column; gap: 2px; margin: 0 0 14px !important; padding: 10px 12px;
+      background: #F7FAFC; border: 1px solid #E6EDF3; border-radius: 8px;
+      font-size: 12.5px !important; color: var(--n8) !important; line-height: 1.4;
+    }
+    .nextUp span { color: var(--o7); font-size: 10px; font-weight: 750; text-transform: uppercase; letter-spacing: .06em; }
 
     .enrollPanel {
       position: relative; z-index: 1; padding: 26px; color: var(--n9);
@@ -296,6 +333,7 @@ export class CoursePage implements OnInit {
   readonly modulesLoaded = signal(false);
   readonly enrollPending = signal(false);
   readonly enrollError = signal<string | null>(null);
+  readonly displayPercent = signal(0);
   enrolled(): boolean { return this.courseState.isEnrolled(this.course()?.slug || ''); }
   enroll(slug: string): void {
     if (this.enrollPending()) return;
@@ -340,6 +378,7 @@ export class CoursePage implements OnInit {
           topicTitles: module.topicTitles,
         })));
         this.modulesLoaded.set(true);
+        this.animatePercent(this.completionPercent());
       },
       error: () => this.modulesLoaded.set(true),
     });
@@ -350,6 +389,28 @@ export class CoursePage implements OnInit {
   topicTotal(): number { return this.phases().reduce((total, phase) => total + phase.topicCount, 0); }
   nextPhase(): PhaseCard | undefined { return this.phases().find((phase) => !phase.completed) ?? this.phases()[0]; }
   printCertificate(slug: string): void { this.api.issueCertificate(slug).subscribe({ next: () => window.print() }); }
+
+  scrollToModules(): void {
+    document.getElementById('modulesSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  scrollToModule(phaseId: number): void {
+    document.getElementById('module-' + phaseId)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  /** Eases the progress ring from its current value up to `target` instead of snapping. */
+  private animatePercent(target: number): void {
+    const start = this.displayPercent();
+    const startTime = performance.now();
+    const duration = 700;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - startTime) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      this.displayPercent.set(Math.round(start + (target - start) * eased));
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
 }
 
 export const courseSlugs = ROLE_COURSES.map((course) => course.slug);
