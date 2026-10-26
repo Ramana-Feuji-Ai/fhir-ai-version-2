@@ -26,6 +26,13 @@ spring:
 
 server:
   port: 18081
+  error:
+    # Default is "never", which strips the exception message (e.g. "missing GROQ_API_KEY", sandbox
+    # validation diagnostics) from every error response -- the frontend then has nothing useful to
+    # show. This is an internal learning-platform API behind auth, not a public API, so exposing the
+    # message (not the stacktrace) is an acceptable and necessary trade-off.
+    include-message: always
+    include-stacktrace: never
 
 fhir:
   seed:
@@ -44,6 +51,6 @@ fhir:
     demo-email: mr@fhi.local
     demo-password: "ChangeMe123!"
   groq:
-    api-key: ${GROQ_API_KEY:}
+    api-key: ${GROQ_API_KEY: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}
     base-url: https://api.groq.com/openai/v1
     model: openai/gpt-oss-20b

@@ -1,8 +1,8 @@
 import { Component, HostListener, effect, inject, signal } from '@angular/core';
-import { marked } from 'marked';
 import { AuthService } from '../core/auth.service';
 import { AssistantContextService } from '../core/assistant-context.service';
 import { AssistantApi } from '../core/assistant.api';
+import { MarkdownPipe } from '../core/markdown.pipe';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -17,6 +17,7 @@ const GREETING: ChatMessage = {
 @Component({
   selector: 'fhi-ai-assistant',
   standalone: true,
+  imports: [MarkdownPipe],
   template: `
     @if (auth.isLoggedIn()) {
       <div class="aiDock">
@@ -45,7 +46,7 @@ const GREETING: ChatMessage = {
               @for (msg of messages(); track $index) {
                 <div class="bubble" [class.user]="msg.role === 'user'" [class.bot]="msg.role === 'assistant'">
                   @if (msg.role === 'assistant') {
-                    <div class="markdown" [innerHTML]="renderMarkdown(msg.text)"></div>
+                    <div class="markdown" [innerHTML]="msg.text | markdown"></div>
                   } @else {
                     {{ msg.text }}
                   }
@@ -320,12 +321,6 @@ export class AiAssistantComponent {
 
   close(): void {
     this.open.set(false);
-  }
-
-  renderMarkdown(text: string): string {
-    // Angular's [innerHTML] binding sanitizes this automatically (strips scripts/unsafe attrs),
-    // so we don't need to (and shouldn't) bypass security here.
-    return marked.parse(text, { async: false, breaks: true }) as string;
   }
 
   send(): void {

@@ -1,0 +1,83 @@
+[
+  {
+    "title": "Enterprise FHIR API Design Standards",
+    "assetType": "Architecture",
+    "version": "3.2",
+    "status": "APPROVED",
+    "tags": "api, rest, design, canonical urls, error handling",
+    "summary": "Baseline conventions for every FHIR API the organization publishes: canonical URLs, interaction design, and error handling.",
+    "content": "All FHIR endpoints must be versioned FHIR R4 REST APIs. Canonical URLs for profiles and value sets use the pattern https://fhir.example.org/StructureDefinition/<name> and must not change once published; publish a new version instead. Every interaction (read, search, create, update, delete) must support conditional headers (If-Match, If-None-Exist) where applicable. Errors must always be returned as an OperationOutcome with severity, code, and a human-readable diagnostics string -- never a bare HTTP error with no body. Search parameters must be declared in the server's CapabilityStatement before clients are told to rely on them."
+  },
+  {
+    "title": "Da Vinci PAS Implementation Notes",
+    "assetType": "IG guidance",
+    "version": "2026.2",
+    "status": "APPROVED",
+    "tags": "prior authorization, pas, da vinci, claim, coverage",
+    "summary": "Enterprise decisions for implementing the Da Vinci Prior Authorization Support (PAS) implementation guide.",
+    "content": "Prior authorization requests are represented using the Claim resource per Da Vinci PAS, submitted via the $submit operation, not plain Claim create. The minimum resource set for a PAS request is: Patient, Coverage, PractitionerRole (ordering provider), Organization (requesting and payer), ServiceRequest (or the clinical resource being authorized), and the Claim itself referencing all of the above. Responses come back as a ClaimResponse with an outcome of queued, complete, error, or partial. Supporting clinical evidence should be attached via Claim.supportingInfo referencing DocumentReference or QuestionnaireResponse, not inlined as free text."
+  },
+  {
+    "title": "FHIR Error Handling Pattern",
+    "assetType": "ADR",
+    "version": "1.4",
+    "status": "APPROVED",
+    "tags": "operationoutcome, error handling, trace id, validation",
+    "summary": "How every service must construct and return OperationOutcome resources, including trace identifiers for support triage.",
+    "content": "Every non-2xx FHIR response must return a single OperationOutcome resource. issue.severity is 'error' for anything that blocked the operation and 'warning' for things that succeeded despite a concern. issue.code uses the standard FHIR IssueType value set (e.g. required, invalid, not-found, conflict, code-invalid, business-rule). issue.diagnostics must be a plain-language sentence a developer can act on without reading source code, and issue.expression should be a FHIRPath pointing at the offending element. Every OperationOutcome must also include an extension carrying a support trace id so the Support/Operations team can correlate a client-reported error with server logs."
+  },
+  {
+    "title": "Prior Authorization Security Pattern",
+    "assetType": "Security",
+    "version": "2.1",
+    "status": "APPROVED",
+    "tags": "smart on fhir, scopes, audit, minimum necessary",
+    "summary": "SMART on FHIR scope design and audit expectations for prior-authorization and other payer APIs.",
+    "content": "Prior authorization and claims endpoints require SMART on FHIR scopes scoped to the resource and interaction, e.g. system/Claim.write and system/Claim.read for backend services, or patient/Coverage.read for patient-facing apps -- never a blanket system/*.* scope. Every read or write of Patient, Coverage, or Claim data must produce an audit log entry recording the acting client id, the scope used, the resource type and id touched, and a timestamp. Responses must follow the 'minimum necessary' principle: use _elements or a narrower search rather than returning full resources when only a few fields are needed."
+  },
+  {
+    "title": "US Core Adoption Guide",
+    "assetType": "IG guidance",
+    "version": "6.1",
+    "status": "APPROVED",
+    "tags": "us core, must support, profiles, patient, observation",
+    "summary": "How the organization applies US Core profiles: Must Support handling, and which US Core profiles are mandatory for which resource types.",
+    "content": "Any Patient, Observation, Condition, MedicationRequest, or Coverage resource exposed on a public-facing endpoint must declare the matching US Core profile in meta.profile. 'Must Support' on a US Core element means: if the source system holds the data, it must be populated; if the source system does not hold it, the element may be omitted, but must never be replaced with a fabricated placeholder value. US Core race and ethnicity extensions are only required on Patient when the source system captures that data as structured, codified values -- free-text values must not be forced into the coded extension."
+  },
+  {
+    "title": "Terminology Binding Policy",
+    "assetType": "Standard",
+    "version": "1.0",
+    "status": "APPROVED",
+    "tags": "terminology, value set, binding strength, snomed, loinc, rxnorm",
+    "summary": "How binding strength (required/extensible/preferred/example) is interpreted and enforced across services.",
+    "content": "A 'required' binding means the code must come from the bound value set or the resource is rejected; validation must reject any code outside it. An 'extensible' binding means a code from the value set must be used if a suitable one exists there, but a code from another system is allowed with a documented reason when the value set has no match -- this must never be silently accepted without that reason being recorded. 'Preferred' and 'example' bindings are advisory only and must not block a create or update. Standard terminology systems in use: SNOMED CT for conditions and procedures, LOINC for observations, RxNorm for medications, and the HL7 Da Vinci PDex/PAS code systems for payer-specific codes."
+  },
+  {
+    "title": "Bundle and Transaction Pattern",
+    "assetType": "Pattern",
+    "version": "1.2",
+    "status": "APPROVED",
+    "tags": "bundle, transaction, batch, referential integrity",
+    "summary": "When to use a transaction Bundle versus a batch Bundle, and how intra-bundle references must be written.",
+    "content": "Use a 'transaction' Bundle when the entries must all succeed or all fail together (e.g. creating a Patient and its first Encounter atomically); use a 'batch' Bundle when entries are independent and partial success is acceptable (e.g. a set of unrelated searches). Within a transaction Bundle, a resource being created for the first time must be referenced by other entries using a urn:uuid: fullUrl, never a guessed server-assigned id, so the server can resolve the reference after assigning the real id. Batch Bundle entries must never reference each other by urn:uuid:, since there is no guaranteed processing order across entries."
+  },
+  {
+    "title": "Sandbox and Validation FAQ",
+    "assetType": "FAQ",
+    "version": "1.0",
+    "status": "APPROVED",
+    "tags": "sandbox, faq, validation, required fields, onboarding",
+    "summary": "Common questions from developers new to the FHIR developer sandbox and its validation rules.",
+    "content": "Q: Why was my Patient create rejected? A: The sandbox requires at least one identifier, at least one name, and a gender on every Patient; check the OperationOutcome's issue.expression for the exact missing field. Q: Can I use real patient data in the sandbox? A: No -- the sandbox only accepts synthetic, non-PHI data, consistent with enterprise privacy policy. Q: How do I get back to a known-good dataset? A: Use the sandbox's reset action, which restores the seeded baseline dataset and discards anything created, updated, or deleted in the session. Q: Which resource types does the sandbox support? A: Patient, Practitioner, Organization, Encounter, Observation, Condition, MedicationRequest, Coverage, and Claim."
+  },
+  {
+    "title": "Referral and Care Coordination Draft Pattern",
+    "assetType": "Pattern",
+    "version": "0.3",
+    "status": "PENDING",
+    "tags": "referral, care coordination, task, servicerequest",
+    "summary": "Draft pattern for representing inter-organization referrals; awaiting architecture review before approval.",
+    "content": "Draft: a referral is represented as a ServiceRequest with intent 'order' and a Task tracking its status, referencing the requesting and receiving Organization via ServiceRequest.requester and ServiceRequest.performer. This pattern is not yet approved for enterprise use; do not cite it as an implementation decision until it clears architecture review."
+  }
+]

@@ -3,16 +3,11 @@ package com.fhi.fhirlearning.service;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.fhi.fhirlearning.config.FhirProperties;
 import com.fhi.fhirlearning.domain.phase.Phase;
 import com.fhi.fhirlearning.domain.phase.Section;
 import com.fhi.fhirlearning.domain.phase.Slide;
@@ -48,8 +43,7 @@ public class AssistantService {
     private final CurriculumService curriculumService;
     private final CourseService courseService;
     private final EnrollmentService enrollmentService;
-    private final FhirProperties.Groq groqConfig;
-    private final RestClient restClient;
+    private final GroqClient groqClient;
 
     public AssistantService(
             TopicRepository topicRepository,
@@ -57,23 +51,18 @@ public class AssistantService {
             CurriculumService curriculumService,
             CourseService courseService,
             EnrollmentService enrollmentService,
-            FhirProperties props
+            GroqClient groqClient
     ) {
         this.topicRepository = topicRepository;
         this.phaseRepository = phaseRepository;
         this.curriculumService = curriculumService;
         this.courseService = courseService;
         this.enrollmentService = enrollmentService;
-        this.groqConfig = props.groq();
-        this.restClient = RestClient.create();
+        this.groqClient = groqClient;
     }
 
     @Transactional(readOnly = true)
     public AssistantAskResponse ask(AssistantAskRequest req) {
-        if (groqConfig == null || groqConfig.apiKey() == null || groqConfig.apiKey().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Assistant is not configured (missing GROQ_API_KEY)");
-        }
-
         String screenContext = switch (req.contextType()) {
             case "topic" -> req.contextId() == null ? "" : buildTopicContext(req.contextId());
             case "phase" -> req.contextId() == null ? "" : buildPhaseContext(req.contextId());
@@ -86,28 +75,7 @@ public class AssistantService {
                 ? req.question()
                 : "Course material:\n" + context + "\n\nQuestion: " + req.question();
 
-        GroqMessage[] messages = {
-                new GroqMessage("system", SYSTEM_PROMPT),
-                new GroqMessage("user", userContent),
-        };
-        GroqRequest body = new GroqRequest(groqConfig.model(), messages, 0.3, 700);
-
-        try {
-            GroqResponse response = restClient.post()
-                    .uri(groqConfig.baseUrl() + "/chat/completions")
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + groqConfig.apiKey())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(body)
-                    .retrieve()
-                    .body(GroqResponse.class);
-
-            if (response == null || response.choices() == null || response.choices().isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Assistant returned no answer");
-            }
-            return new AssistantAskResponse(response.choices().get(0).message().content());
-        } catch (RestClientException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Assistant request failed: " + e.getMessage(), e);
-        }
+        return new AssistantAskResponse(groqClient.complete(SYSTEM_PROMPT, userContent, 0.3, 1000));
     }
 
     private String buildProgressContext() {
@@ -180,12 +148,4 @@ public class AssistantService {
         if (html == null) return "";
         return html.replaceAll("<[^>]+>", " ").replaceAll("\\s+", " ").trim();
     }
-
-    private record GroqMessage(String role, String content) {}
-
-    private record GroqRequest(String model, GroqMessage[] messages, double temperature, int max_tokens) {}
-
-    private record GroqResponse(List<GroqChoice> choices) {}
-
-    private record GroqChoice(GroqMessage message) {}
 }

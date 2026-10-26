@@ -1,0 +1,112 @@
+[
+  {
+    "resourceType": "Patient",
+    "id": "patient-001",
+    "identifier": [{ "system": "http://hospital.example.org/mrn", "value": "MRN-100234" }],
+    "name": [{ "family": "Okafor", "given": ["Amara"] }],
+    "gender": "female",
+    "birthDate": "1988-04-12",
+    "address": [{ "line": ["221 Riverside Dr"], "city": "Austin", "state": "TX", "postalCode": "78701" }],
+    "telecom": [{ "system": "phone", "value": "555-0148", "use": "home" }]
+  },
+  {
+    "resourceType": "Patient",
+    "id": "patient-002",
+    "identifier": [{ "system": "http://hospital.example.org/mrn", "value": "MRN-100587" }],
+    "name": [{ "family": "Chen", "given": ["Liam"] }],
+    "gender": "male",
+    "birthDate": "1975-11-02",
+    "address": [{ "line": ["48 Elm St"], "city": "Denver", "state": "CO", "postalCode": "80202" }],
+    "telecom": [{ "system": "phone", "value": "555-0199", "use": "mobile" }]
+  },
+  {
+    "resourceType": "Practitioner",
+    "id": "practitioner-001",
+    "identifier": [{ "system": "http://hl7.org/fhir/sid/us-npi", "value": "1932345678" }],
+    "name": [{ "family": "Mitchell", "given": ["Sarah"], "prefix": ["Dr."] }],
+    "telecom": [{ "system": "email", "value": "sarah.mitchell@riverside.example.org" }]
+  },
+  {
+    "resourceType": "Organization",
+    "id": "org-provider-01",
+    "identifier": [{ "system": "http://hl7.org/fhir/sid/us-npi", "value": "1447889900" }],
+    "name": "Riverside Community Hospital",
+    "type": [{ "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/organization-type", "code": "prov", "display": "Healthcare Provider" }] }]
+  },
+  {
+    "resourceType": "Organization",
+    "id": "org-payer-01",
+    "identifier": [{ "system": "http://hl7.org/fhir/sid/us-npi", "value": "1998877665" }],
+    "name": "Alliance Health Plan",
+    "type": [{ "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/organization-type", "code": "pay", "display": "Payer" }] }]
+  },
+  {
+    "resourceType": "Encounter",
+    "id": "encounter-001",
+    "status": "finished",
+    "class": { "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code": "AMB", "display": "ambulatory" },
+    "subject": { "reference": "Patient/patient-001", "display": "Amara Okafor" },
+    "participant": [{ "individual": { "reference": "Practitioner/practitioner-001", "display": "Dr. Sarah Mitchell" } }],
+    "serviceProvider": { "reference": "Organization/org-provider-01" },
+    "period": { "start": "2026-01-10T09:00:00Z", "end": "2026-01-10T09:45:00Z" }
+  },
+  {
+    "resourceType": "Observation",
+    "id": "observation-001",
+    "status": "final",
+    "category": [{ "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/observation-category", "code": "vital-signs" }] }],
+    "code": { "coding": [{ "system": "http://loinc.org", "code": "8480-6", "display": "Systolic blood pressure" }] },
+    "subject": { "reference": "Patient/patient-001" },
+    "encounter": { "reference": "Encounter/encounter-001" },
+    "effectiveDateTime": "2026-01-10T09:10:00Z",
+    "valueQuantity": { "value": 128, "unit": "mmHg", "system": "http://unitsofmeasure.org", "code": "mm[Hg]" }
+  },
+  {
+    "resourceType": "Observation",
+    "id": "observation-002",
+    "status": "final",
+    "category": [{ "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/observation-category", "code": "laboratory" }] }],
+    "code": { "coding": [{ "system": "http://loinc.org", "code": "4548-4", "display": "Hemoglobin A1c" }] },
+    "subject": { "reference": "Patient/patient-002" },
+    "effectiveDateTime": "2026-02-02T14:20:00Z",
+    "valueQuantity": { "value": 7.1, "unit": "%", "system": "http://unitsofmeasure.org", "code": "%" }
+  },
+  {
+    "resourceType": "Condition",
+    "id": "condition-001",
+    "clinicalStatus": { "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/condition-clinical", "code": "active" }] },
+    "code": { "coding": [{ "system": "http://snomed.info/sct", "code": "44054006", "display": "Type 2 diabetes mellitus" }] },
+    "subject": { "reference": "Patient/patient-001" },
+    "onsetDateTime": "2022-06-01"
+  },
+  {
+    "resourceType": "MedicationRequest",
+    "id": "medreq-001",
+    "status": "active",
+    "intent": "order",
+    "medicationCodeableConcept": { "coding": [{ "system": "http://www.nlm.nih.gov/research/umls/rxnorm", "code": "860975", "display": "Metformin 500 MG" }] },
+    "subject": { "reference": "Patient/patient-001" },
+    "requester": { "reference": "Practitioner/practitioner-001" },
+    "authoredOn": "2026-01-10"
+  },
+  {
+    "resourceType": "Coverage",
+    "id": "coverage-001",
+    "status": "active",
+    "beneficiary": { "reference": "Patient/patient-001" },
+    "payor": [{ "reference": "Organization/org-payer-01" }],
+    "subscriberId": "SUB-778812",
+    "class": [{ "type": { "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/coverage-class", "code": "plan" }] }, "value": "Gold PPO" }]
+  },
+  {
+    "resourceType": "Claim",
+    "id": "claim-001",
+    "status": "active",
+    "type": { "coding": [{ "system": "http://terminology.hl7.org/CodeSystem/claim-type", "code": "professional" }] },
+    "use": "claim",
+    "patient": { "reference": "Patient/patient-001" },
+    "provider": { "reference": "Organization/org-provider-01" },
+    "created": "2026-01-11",
+    "insurance": [{ "sequence": 1, "focal": true, "coverage": { "reference": "Coverage/coverage-001" } }]
+  }
+]

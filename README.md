@@ -40,4 +40,3 @@ Sign in: `mr@fhi.local` / `ChangeMe123!`
 
 The old 13-topic L&D site was moved to `legacy-ld/` so it is not mistaken for the academy.
 "# fhir-ai" 
-"# fhir-ai-version-2" 

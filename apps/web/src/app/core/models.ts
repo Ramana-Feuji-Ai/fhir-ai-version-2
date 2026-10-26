@@ -160,3 +160,121 @@ export interface PhaseProgress {
   completedLegacyKeys: string[];
   completedTopicIds: number[];
 }
+
+export interface SandboxResourceTypeMeta {
+  resourceType: string;
+  count: number;
+  sampleIds: string[];
+}
+
+export interface SandboxMeta {
+  resourceTypes: SandboxResourceTypeMeta[];
+}
+
+export type SandboxOperation = 'read' | 'search' | 'create' | 'update' | 'delete' | 'history' | 'transaction' | 'batch';
+
+export interface SandboxRequestLogEntry {
+  id: string;
+  timestamp: string;
+  operation: SandboxOperation;
+  method: string;
+  url: string;
+  requestBody: string | null;
+  status: number;
+  ok: boolean;
+  responseBody: string;
+}
+
+// ---------------------------------------------------------------- 8.3 Design and Development Assistant
+
+export interface RecommendResourcesResponse {
+  answer: string;
+}
+
+export interface GeneratePayloadResponse {
+  json: string;
+  valid: boolean;
+  issues: string[];
+}
+
+export interface GenerateApiResponse {
+  request: string;
+  explanation: string;
+}
+
+export interface ExplainIgResponse {
+  answer: string;
+  checklist: string[];
+}
+
+// ---------------------------------------------------------------- 8.4 Test Case and Test Data Assistant
+
+export interface TestCase {
+  id: string;
+  type: string;
+  scenario: string;
+  expectedResult: string;
+}
+
+export interface GenerateTestCasesResponse {
+  cases: TestCase[];
+}
+
+export type DefectInjection = 'NONE' | 'TERMINOLOGY' | 'REFERENCE' | 'MIXED';
+
+export interface GeneratedResource {
+  resourceType: string;
+  id: string;
+  valid: boolean;
+  issues: string[];
+  writtenToSandbox: boolean;
+}
+
+export interface GenerateTestDataResponse {
+  seed: number;
+  fhirVersion: string;
+  resourceCounts: Record<string, number>;
+  defectCount: number;
+  writtenToSandboxCount: number;
+  resources: GeneratedResource[];
+  bundleJson: string;
+}
+
+export interface ValidationIssueEntry {
+  severity: string;
+  code: string;
+  expression: string;
+  diagnostics: string;
+}
+
+export interface ExplainFailureResponse {
+  issues: ValidationIssueEntry[];
+  explanation: string;
+}
+
+// ---------------------------------------------------------------- 8.5 Enterprise Knowledge Assistant
+
+export type KnowledgeStatus = 'APPROVED' | 'PENDING' | 'DISABLED';
+
+export interface KnowledgeAsset {
+  id: string;
+  title: string;
+  assetType: string;
+  version: string;
+  status: KnowledgeStatus;
+  tags: string;
+  summary: string;
+  updatedAt: string;
+}
+
+export interface KnowledgeCitation {
+  assetId: string;
+  title: string;
+  version: string;
+  assetType: string;
+}
+
+export interface KnowledgeAskResponse {
+  answer: string;
+  citations: KnowledgeCitation[];
+}

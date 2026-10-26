@@ -32,5 +32,29 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/courses/my-learning.page').then((m) => m.MyLearningPage),
   },
+  {
+    path: 'sandbox',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/sandbox/sandbox.page').then((m) => m.SandboxPage),
+  },
+  {
+    path: 'design',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/design/design.page').then((m) => m.DesignPage),
+  },
+  {
+    path: 'testing',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/testing/testing.page').then((m) => m.TestingPage),
+  },
+  {
+    path: 'knowledge',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/knowledge/knowledge.page').then((m) => m.KnowledgePage),
+  },
   { path: '**', redirectTo: '' },
 ];

@@ -2266,3 +2266,53 @@ footer {
     gap: 28px;
     padding: 36px 0;
 }
+
+/* Shared rendering for AI-generated markdown ([innerHTML] via the `markdown` pipe): the AI
+   assistant widget, Design/Testing/Knowledge assistant answers. Keeps tables, headings, and lists
+   legible instead of collapsing to unstyled browser defaults. */
+.markdown { font-size: 13.5px; line-height: 1.7; color: var(--n7); }
+.markdown > *:first-child { margin-top: 0; }
+.markdown > *:last-child { margin-bottom: 0; }
+.markdown h1, .markdown h2, .markdown h3, .markdown h4 {
+    font-family: var(--display);
+    color: var(--n9);
+    line-height: 1.3;
+    margin: 18px 0 8px;
+}
+.markdown h1 { font-size: 20px; }
+.markdown h2 { font-size: 17px; }
+.markdown h3 { font-size: 15px; }
+.markdown h4 { font-size: 13.5px; }
+.markdown p { margin: 0 0 10px; }
+.markdown ul, .markdown ol { margin: 0 0 10px; padding-left: 22px; }
+.markdown li { margin: 3px 0; }
+.markdown strong { color: var(--n9); font-weight: 700; }
+.markdown code {
+    background: var(--n0);
+    border: 1px solid var(--g3);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 12px;
+}
+.markdown pre {
+    background: #0D1B2A;
+    color: #E8EEF4;
+    border-radius: 8px;
+    padding: 14px;
+    overflow: auto;
+    margin: 0 0 12px;
+}
+.markdown pre code { background: none; border: none; padding: 0; color: inherit; }
+.markdown blockquote {
+    border-left: 3px solid var(--b6);
+    margin: 0 0 12px;
+    padding: 2px 14px;
+    background: var(--n0);
+    color: var(--n6);
+}
+.markdown table { width: 100%; border-collapse: collapse; margin: 0 0 14px; font-size: 12.5px; }
+.markdown th, .markdown td { text-align: left; padding: 8px 10px; border: 1px solid var(--g3); vertical-align: top; }
+.markdown th { background: var(--n0); color: var(--n7); font-weight: 650; }
+.markdown a { color: var(--b6); }
+.markdown hr { border: none; border-top: 1px solid var(--g3); margin: 14px 0; }
